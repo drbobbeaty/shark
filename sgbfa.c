@@ -20,7 +20,6 @@
 /* 	Third-Party Headers 	*/
 
 /* 	Other Headers 			*/
-#include "f2c.h"
 
 /* 	Forward Declarations 	*/
 /*
@@ -31,6 +30,8 @@ extern int sscal_();
 extern int saxpy_();
 
 /* 	Public Data Types 		*/
+#define MIN(a,b)	((a) < (b) ? (a) : (b))
+#define MAX(a,b)	((a) > (b) ? (a) : (b))
 
 /* 	Public Data Constants 	*/
 /*
@@ -38,7 +39,7 @@ extern int saxpy_();
  * times we need to pass in a constant 1, but need a reference to
  * it. That's why this is here.
  */
-const integer one = 1;
+const long int one = 1;
 
 
 /* ----------------------------------------------------------------------------
@@ -129,18 +130,18 @@ const integer one = 1;
  *     integer isamax
  */
 
-int sgbfa_(doublereal *abd, integer *lda, integer *n, integer *ml, integer *mu, integer *ipvt, integer *info) {
+int sgbfa_(double *abd, long int *lda, long int *n, long int *ml, long int *mu, long int *ipvt, long int *info) {
 	// do these for speed
-	integer sld = *ml;
-	integer sud = *mu;
-	integer m = sld + sud + 1;
-	integer sfda = *lda;
+	long int sld = *ml;
+	long int sud = *mu;
+	long int m = sld + sud + 1;
+	long int sfda = *lda;
 
 	// Local variables
-	integer i, j, k, l;
-	doublereal t;
-	integer i0, j0, j1, imin, imax;
-	integer lm, mm, ju, jz, kp1, nm1;
+	long int i, j, k, l;
+	double t;
+	long int i0, j0, j1, imin, imax;
+	long int lm, mm, ju, jz, kp1, nm1;
 
 	/* Parameter adjustments */
 	abd -= 1 + sfda * 1;
@@ -153,7 +154,7 @@ int sgbfa_(doublereal *abd, integer *lda, integer *n, integer *ml, integer *mu, 
 	 * zero initial fill-in columns
 	 */
 	j0 = sud + 2;
-	j1 = min(*n, m) - 1;
+	j1 = MIN(*n, m) - 1;
 	if (j1 >= j0) {
 		for (jz = j0; jz <= j1; jz++) {
 			imin = m + 1 - jz + jz * sfda;
@@ -190,7 +191,7 @@ int sgbfa_(doublereal *abd, integer *lda, integer *n, integer *ml, integer *mu, 
 			 * find l = pivot index
 			 */
 			// computing MIN
-			lm = min(sld, (*n - k));
+			lm = MIN(sld, (*n - k));
 //			l = isamax(lm+1,abd(m,k),1) + m - 1
 //               don't interchange rows
 			l = m;
@@ -224,7 +225,7 @@ int sgbfa_(doublereal *abd, integer *lda, integer *n, integer *ml, integer *mu, 
 			 */
 			// computing MIN
 			// computing MAX
-			ju = min(max(ju, (sud + ipvt[k])) , *n);
+			ju = MIN(MAX(ju, (sud + ipvt[k])) , *n);
 			mm = m;
 			if (ju >= kp1) {
 				for (j = kp1; j <= ju; j++) {

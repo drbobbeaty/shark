@@ -20,7 +20,6 @@
 /* 	Third-Party Headers 	*/
 
 /* 	Other Headers 			*/
-#include "f2c.h"
 
 /* 	Forward Declarations 	*/
 
@@ -73,20 +72,20 @@
  *
  * ----------------------------------------------------------------------------
  */
-doublereal sdot_(integer *n, doublereal *sx, integer *incx, doublereal *sy, integer *incy) {
-    doublereal 	retval = 0;
+double sdot_(long int *n, double *sx, long int *incx, double *sy, long int *incy) {
+    double 		retval = 0;
 	/* dereference some arguments for speed of access later */
-	integer		count = *n;
-	integer		dix = *incx;
-	integer 	diy = *incy;
+	long int	count = *n;
+	long int	dix = *incx;
+	long int 	diy = *incy;
 
 	/*
 	 * First, see if we have anything to do
 	 */
 	if (count > 0) {
-		integer	m = 0;
-		integer	ix = 0;
-		integer iy = 0;
+		long int	m = 0;
+		long int	ix = 0;
+		long int	iy = 0;
 
 		for (m = 0; m < count; m++) {
 			retval += sx[ix] * sy[iy];

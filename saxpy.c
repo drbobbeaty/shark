@@ -20,7 +20,6 @@
 /* 	Third-Party Headers 	*/
 
 /* 	Other Headers 			*/
-#include "f2c.h"
 
 /* 	Forward Declarations 	*/
 
@@ -75,13 +74,13 @@
  *
  * ----------------------------------------------------------------------------
  */
-int saxpy_(integer *n, doublereal *sa, doublereal *sx, integer *incx, doublereal *sy, integer *incy) {
+int saxpy_(long int *n, double *sa, double *sx, long int *incx, double *sy, long int *incy) {
 	int			retval = 0;
 	/* dereference the pointers for faster access later on */
-	integer		count = *n;
-	doublereal	a = *sa;
-	integer		dix = *incx;
-	integer		diy = *incy;
+	long int	count = *n;
+	double		a = *sa;
+	long int	dix = *incx;
+	long int	diy = *incy;
 
 	/*
 	 * First, see if we have anything to do
@@ -98,8 +97,8 @@ int saxpy_(integer *n, doublereal *sa, doublereal *sx, integer *incx, doublereal
 			 * we need to do this in batches. So, finish off the odd
 			 * ones, and then batch the rest.
 			 */
-			integer		m = 0;
-			integer		mm = count - (count/4)*4;
+			long int	m = 0;
+			long int	mm = count - (count/4)*4;
 
 			/*
 			 * OK... let's do the odd balls first...
@@ -119,9 +118,9 @@ int saxpy_(integer *n, doublereal *sa, doublereal *sx, integer *incx, doublereal
 				}
 			}
 		} else {
-			integer		m = 0;
-			integer		ix = 0;
-			integer 	iy = 0;
+			long int	m = 0;
+			long int	ix = 0;
+			long int 	iy = 0;
 
 			/*
 			 * This is the general routine
