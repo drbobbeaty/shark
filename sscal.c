@@ -20,7 +20,6 @@
 /* 	Third-Party Headers 	*/
 
 /* 	Other Headers 			*/
-#include "f2c.h"
 
 /* 	Forward Declarations 	*/
 
@@ -68,17 +67,17 @@
  *
  * ----------------------------------------------------------------------------
  */
-int sscal_(integer *n, doublereal *sa, doublereal *sx, integer *incx) {
+int sscal_(long int *n, double *sa, double *sx, long int *incx) {
 	int		retval = 0;
 
 	/*
 	 * First, see if we have anything to do...
 	 */
     if (*n > 0) {
-    	integer		i = 0;
-		integer		di = *incx;
-		integer		ns = (*n) * di;
-		doublereal 	a = *sa;
+    	long int		i = 0;
+		long int		di = *incx;
+		long int		ns = (*n) * di;
+		double		 	a = *sa;
 
 		for (; i < ns; i += di) {
 			sx[i] *= a;
