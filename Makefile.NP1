@@ -1,0 +1,49 @@
+#
+#   This is the makefile for Shark for the NP1
+#
+#	XMAX = maximum number of nodes in the x direction
+#	YMAX = maximum number of nodes in the y direction
+#
+SIZE = -DXMAX=75 -DYMAX=200
+F77 = fort10.3
+OBJS = shark.o depmap.o newton.o getdk.o mkdev.o \
+       mkmesh.o parser.o guess.o linpk.o orthomin.o \
+       bias.o minres.o sharkio.o gauss.o \
+       equil.o DC.o oneDes.o sgtsl.o
+
+#   This is the general way to make a .o from a .f and a .F
+#   -w77 => don't give simple f77 incompatibilities warnings
+#   -r8 => make all numbers double precision (even constants)
+#   -i4 => make all integers and logicals use 4 bytes
+#   -u => make undefined variables cause an error
+#   -c => don't link the output
+.f.o :
+	@ $(F77) -w77 -r8 -i4 -u -c $*.f
+#   Notice the -DNP1 in the compile line!
+.F.o :
+	@ $(F77) -DNP1 -F $(SIZE) $*.F
+	@ mv $*.f $*.fs
+	@ sed 's/^#/c/' < $*.fs > $*.f
+	@ $(F77) -w77 -r8 -i4 -u -c $*.f
+	@ rm $*.f $*.fs
+
+#   This is the final compilation of all the modules
+shark : $(OBJS)
+	@ $(F77) $(OBJS) -o shark
+
+#   These routines can be compiled with optimization
+minres.o orthomin.o :
+	@ $(F77) -DNP1 -F $(SIZE) $*.F
+	@ mv $*.f $*.fs
+	@ sed 's/^#/c/' < $*.fs > $*.f
+	@ $(F77) -w77 -r8 -i4 -u -O -c $*.f
+	@ rm $*.f $*.fs
+
+#   These routines can be compiled with vectorization and optimization
+linpk.o gauss.o sgtsl.o :
+	@ $(F77) -DNP1 -F $(SIZE) $*.F
+	@ mv $*.f $*.fs
+	@ sed 's/^#/c/' < $*.fs > $*.f
+	@ $(F77) -w77 -r8 -i4 -u -V -O -c $*.f
+	@ rm $*.f $*.fs $*.fv
+

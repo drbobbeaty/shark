@@ -1,0 +1,36 @@
+#
+#   This is the makefile for Shark for the Sun 3
+#
+#	XMAX = maximum number of nodes in the x direction
+#	YMAX = maximum number of nodes in the y direction
+#
+SIZE = -DXMAX=75 -DYMAX=200
+OBJS = shark.o depmap.o newton.o getdk.o mkdev.o \
+       mkmesh.o parser.o guess.o orthomin.o \
+       bias.o minres.o sharkio.o gauss.o equil.o \
+       DC.o oneDes.o sgtsl.o
+
+#   This is the general way to make a .o from a .f
+#    -f68881 => use the 68881 math processor
+#    -u => make all undefined variables cause error messages
+#    -c => do not link the output
+.f.o :
+	@ f77 -f68881 -u -c $*.f
+#
+#   The -DSun3 means we don't have enough memory for the
+#   direct solvers
+#
+.F.o :
+	@ f77 -f68881 -u -DSun3 -c $(SIZE) $*.F
+#
+#   This is the final compilation of all the modules
+#
+shark : $(OBJS)
+	@ f77 $(OBJS) -f68881 -u -o shark
+#
+#   For these routines we can also optimize the code without
+#   error (that's the -O), they are all .F's
+#
+orthomin.o minres.o gauss.o linpk.o sgtsl.o:
+	@ f77 -f68881 -O -u -c $(SIZE) $*.F
+
