@@ -1,0 +1,50 @@
+#
+#   This is the makefile for Shark for Linux/EGCS
+#
+#	XMAX = maximum number of nodes in the x direction
+#	YMAX = maximum number of nodes in the y direction
+#
+CC = gcc
+CCOPTS = -O2
+F77 = g77
+F77OPTS = -O2 -Wimplicit -Wall
+LDOPTS = 
+SIZE = -DXMAX=75 -DYMAX=100
+#
+#   These are all the non-optimized object files
+#
+F77_OBJS = shark.o depmap.o newton.o getdk.o mkdev.o mkmesh.o \
+       parser.o guess.o bias.o sharkio.o equil.o DC.o \
+       oneDes.o full1D.o orthomin.o minres.o gauss.o \
+       linpk.o sgtsl.o sgbsl.o isamax.o
+
+CC_OBJS = sscal.o sdot.o saxpy.o sgbfa.o
+
+OBJS = $(F77_OBJS) $(CC_OBJS)
+
+#   This is the general way to make a .o from a .f
+#    -Wimplicit => make all undefined variables cause error messages
+#    -c => do not link the output
+.f.o :
+	$(F77) $(F77OPTS) -c $*.f -o $*.o
+
+#   This is the general way to make a .o from a .c
+.c.o :
+	$(CC) $(CCOPTS) -c $*.c -o $*.o
+
+#
+#   The -DDIRECT means we have enough memory for the
+#   direct solvers
+#
+.F.o :
+	$(F77) $(F77OPTS) -DDIRECT -c $(SIZE) $*.F -o $*.o
+
+#
+#   This is the final compilation of all the modules
+#
+shark : $(OBJS)
+	$(F77) $(OBJS) -o shark $(LDOPTS)
+
+clean :
+	rm -rf shark $(OBJS) $(OPT_OBJS) core
+

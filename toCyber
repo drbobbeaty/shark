@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+#  This file converts the .F's to .f's for the Cyber and ships
+#  them out to be compiled
+#
+#	XMAX = maximum number of nodes in the x direction
+#	YMAX = maximum number of nodes in the y direction
+#
+if ( test ! -d $HOME/tmp ) then
+  echo making $HOME/tmp for temporary files...
+  mkdir $HOME/tmp
+fi
+echo Pre-Processing for the Cyber 205...
+for src in DC bias depmap equil getdk mkdev mkmesh newton oneDes \
+	  shark sharkio guess orthomin minres gauss sgtsl linpk
+do
+  f77 -F -DCyber -DXMAX=75 -DYMAX=200 $src.F
+  mv $src.f $src.fs
+  sed 's/^#/c/' < $src.fs > $HOME/tmp/$src.f
+  rm -f $src.fs
+done
+echo Shipping all parts to the Cyber...
+qrh -m -n $1 -st LCD -v cyber.header \
+  $HOME/tmp/shark.f $HOME/tmp/depmap.f $HOME/tmp/newton.f \
+  $HOME/tmp/getdk.f $HOME/tmp/mkdev.f $HOME/tmp/mkmesh.f \
+  parser.f $HOME/tmp/guess.f $HOME/tmp/orthomin.f \
+  $HOME/tmp/bias.f $HOME/tmp/minres.f \
+  $HOME/tmp/sharkio.f $HOME/tmp/gauss.f $HOME/tmp/equil.f \
+  $HOME/tmp/DC.f $HOME/tmp/oneDes.f $HOME/tmp/sgtsl.f \
+  $HOME/tmp/linpk.f eor.file $2 eof.file
+
