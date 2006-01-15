@@ -82,13 +82,12 @@ c
       if ( iter .eq. -1 ) then
         call refine( .false., .true., .true., error )
         if ( error ) then
-          write(6,'('' ''.''**** Error! ****''/
-     +              '' '',''     Shark could not resolve the coupling'',
-     +     '' problems. This problem is not solvable''/
-     +              '' '',''     with the current executable of Shark.'',
-     +     '' The final output is being written and''/
+          write(6,'('' '',''**** Error! ****''/
+     +              '' '',''     Shark could not resolve the '',
+     +     ''coupling problems. This problem is not solvable''/
+     +              '' '',''     with the current executable of '',
+     +     ''Shark. The final output is being written and''/
      +              '' '',''     the solution halted.'')')
-          write(9,'('' '',''#eor'')')
 #         ifndef Cyber
             call flush(6)
             call dump( m1psec, .true., zero )
