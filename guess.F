@@ -1075,6 +1075,7 @@ c     On the right end of the device, there's no interpolation possible
 c     as it's a fixed point.
 c
       rho(xnodes) = xi(nxi)
+      error = .false.
       return
       end
 
