@@ -5,9 +5,9 @@
 #	YMAX = maximum number of nodes in the y direction
 #
 CC = gcc
-CCOPTS = -O2
+CCOPTS = -O2 -faltivec
 F77 = gfortran
-F77OPTS = -O2 -Wall -ftree-vectorize
+F77OPTS = -O2 -Wall -ftree-vectorize -faltivec
 LDOPTS = 
 SIZE = -DXMAX=75 -DYMAX=100
 #
