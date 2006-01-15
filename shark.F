@@ -190,7 +190,8 @@ c
      +                '' '',''Like:''/
      +                '' '',''  $ shark input_deck [output_file]''/
      +                '' '',''or:''/
-     +                '' '',''  $ shark restart [core_file] [output_file]''/
+     +                '' '',''  $ shark restart [core_file] ''/
+     +            ''[output_file]''/
      +                '' '',''Where input_deck, or core_file, is a '',
      +            ''valid, existing, file.'')')
             stop

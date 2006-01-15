@@ -324,7 +324,7 @@ c				now the n drain contact voltage
             n(i,j) = dop(i,j)
             y = y + hy(j) * Ldi
             j = j + 1
-            if ( (dop(i,j) .ge. 0.0) .and. (j .le. ynodes) ) goto 300
+            if ( (dop(i,j) .ge. 0.0) .and. (j .le. ynodes) ) goto 500
             ytemp = y
 c				now the p depletion voltage
             if ( xdp .ne. 0.0 ) then
@@ -925,7 +925,7 @@ c
 c
 c     finally, call depmap to show the initial guess to the user
 c
- 3600 if ( verbose ) then
+      if ( verbose ) then
         call depmap( 1,1 )
       endif
 c

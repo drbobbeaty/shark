@@ -456,6 +456,7 @@ c
       real value,sign,x,gdzz,xpon,se,e
 c
       ndec=0
+      zzzr=0.0
       invalid=.false.
       if (nc .eq. 0) then
         invalid=.true.
