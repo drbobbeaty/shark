@@ -297,7 +297,7 @@ c
 c     open the "core dump" file
 c
 #     ifndef Cyber
-      open( 10, file="shark.core", status="UNKNOWN" )
+      open( 10, file=filenm, status="UNKNOWN" )
 #     endif
       rewind( 10 )
 c
