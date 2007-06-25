@@ -4,10 +4,15 @@
 #	XMAX = maximum number of nodes in the x direction
 #	YMAX = maximum number of nodes in the y direction
 #
+CPU_OPTS = -faltivec
+ifeq ($(shell uname -m),i386)
+	CPU_OPTS = -mfpmath=sse -msse3
+endif
+#CPU_OPTS += -ftree-vectorize
 CC = gcc
-CCOPTS = -O2 -faltivec
-F77 = gfortran
-F77OPTS = -O2 -Wall -ftree-vectorize -faltivec
+CCOPTS = -O3 $(CPU_OPTS)
+F77 = g77
+F77OPTS = -O3 -Wall $(CPU_OPTS)
 LDOPTS = 
 SIZE = -DXMAX=75 -DYMAX=100
 #
@@ -48,3 +53,11 @@ shark : $(OBJS)
 clean :
 	rm -rf shark $(OBJS) $(OPT_OBJS) core
 
+#
+# These are the custom compiles that are needed for the gfortran 4.3.0
+#
+#newton.o : newton.F
+#	$(F77) -O3 -Wall -ftree-vectorize -DDIRECT -c $(SIZE) $*.F -o $*.o
+
+mkmesh.o : mkmesh.F
+	$(F77) -O3 -Wall -DDIRECT -c $(SIZE) $*.F -o $*.o
