@@ -59,7 +59,7 @@ c
      +     delV, delE
       character*8 chmod, doptyp, icchan, chtyp, instyp, debug, guess,
      +     soltyp, symtyp
-      common /struct/ lsorce, tsorce, dopsrc, ldrain, tdrain, 
+      common /struct/ lsorce, tsorce, dopsrc, ldrain, tdrain,
      +                dopdrn, tox, tepi, length, tsub, dopsub,
      +                line, space, npulse, defoc, gsol, gdol,
      +                dopch, srccor, drncor, uins, Qss(Nx)
@@ -201,8 +201,8 @@ c
             if ( soltyp .eq. 'linpk' ) then
 c              wVs = Vs
 c              wVd = Vd
-              wVs = sign( min( abs(Vs), 2.0), Vs )
-              wVd = sign( min( abs(Vd), 2.0), Vd )
+              wVs = sign( min( abs(Vs), 5.0), Vs )
+              wVd = sign( min( abs(Vd), 5.0), Vd )
             else
               wVs = Vs
               wVd = Vd
@@ -544,16 +544,25 @@ c
 c
 c     now we need to move V up to be a good guess for the next
 c     stab at the bias point
+c     NOTE: this was a nice idea, but it's really a very bad
+c           implementation. The optimal solution might be to
+c           use three points and not just two. The problem is
+c           that the values at each node don't scale with the
+c           bias change and so it turns out to be faster to just
+c           use the last solution as the initial guess of the
+c           new bias condition. It's not as good as it probably
+c           could be, but it's faster than anything else I've
+c           tried.
 c
-      if ( (debug .eq. 'yes') .or. (debug .eq. 'sortof') ) then
-        write(6,'('' '','' ...scaling n and v by '',f7.3)')
-     +          dVmax/dVold
-      endif
-      do 600 k=1,ynodes
-        do 600 i=1,xnodes
-          n(i,k) = n(i,k) + ( n(i,k)-nold(i,k) )*dVmax/dVold
-          v(i,k) = v(i,k) + ( v(i,k)-vold(i,k) )*dVmax/dVold
-  600 continue
+c      if ( (debug .eq. 'yes') .or. (debug .eq. 'sortof') ) then
+c        write(6,'('' '','' ...scaling n and v by '',f7.3)')
+c     +          dVmax/dVold
+c      endif
+c      do 600 k=1,ynodes
+c        do 600 i=1,xnodes
+c          n(i,k) = n(i,k) + 0.1*( n(i,k)-nold(i,k) )*dVmax/dVold
+c          v(i,k) = v(i,k) + 0.1*( v(i,k)-vold(i,k) )*dVmax/dVold
+c  600 continue
 c
 c     move dVb and dE up so that we are accelerating the ramp
 c
