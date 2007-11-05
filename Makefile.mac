@@ -11,7 +11,7 @@ endif
 #CPU_OPTS += -ftree-vectorize
 CC = gcc
 CCOPTS = -O3 $(CPU_OPTS)
-F77 = g77
+F77 = gfortran
 F77OPTS = -O3 -Wall $(CPU_OPTS)
 LDOPTS = 
 SIZE = -DXMAX=75 -DYMAX=100
