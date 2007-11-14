@@ -47,7 +47,7 @@ c
      +     delV, delE
       character*8 chmod, doptyp, icchan, chtyp, instyp, debug, guess,
      +     soltyp, symtyp
-      common /struct/ lsorce, tsorce, dopsrc, ldrain, tdrain, 
+      common /struct/ lsorce, tsorce, dopsrc, ldrain, tdrain,
      +                dopdrn, tox, tepi, length, tsub, dopsub,
      +                line, space, npulse, defoc, gsol, gdol,
      +                dopch, srccor, drncor, uins, Qss(Nx)
@@ -65,7 +65,7 @@ c
       logical LOSl, LOSr
       integer i, k, iter, inorm, jnorm
       real tarray(2), ittime, ntime
-      PRECISION vl, vr, vt, vb, vij, hl, hr, ht, hb, norm, 
+      PRECISION vl, vr, vt, vb, vij, hl, hr, ht, hb, norm,
      +          Vob, Voc, dV
 c
 c     precalculate the bulk potential
