@@ -14,6 +14,7 @@ CCOPTS = -O3 $(CPU_OPTS)
 F77 = gfortran
 F77OPTS = -O3 -Wall $(CPU_OPTS)
 LDOPTS = 
+CTAGS = ectags  --excmd=number --tag-relative=no  --fields=+a+m+n+S -R
 SIZE = -DXMAX=75 -DYMAX=100
 #
 #   These are all the non-optimized object files
@@ -52,6 +53,9 @@ shark : $(OBJS)
 
 clean :
 	rm -rf shark $(OBJS) $(OPT_OBJS) core
+
+tags :
+	$(CTAGS) `pwd`
 
 #
 # These are the custom compiles that are needed for the gfortran 4.3.0
