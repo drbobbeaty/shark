@@ -64,4 +64,4 @@ tags :
 #	$(F77) -O3 -Wall -ftree-vectorize -DDIRECT -c $(SIZE) $*.F -o $*.o
 
 mkmesh.o : mkmesh.F
-	$(F77) -O3 -Wall -DDIRECT -c $(SIZE) $*.F -o $*.o
+	$(F77) $(F77OPTS) -DDIRECT -c $(SIZE) $*.F -o $*.o
