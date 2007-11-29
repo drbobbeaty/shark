@@ -24,6 +24,17 @@
 /* 	Forward Declarations 	*/
 
 /* 	Public Data Types 		*/
+/*
+ * Because we need to be able to build this for 32-bit and 64-bit
+ * versions, I want to be able to typedef the integer here so that
+ * the value coming in from the FORTRAN code matches what we will
+ * use here. Without this, we'd have a mess on the conversions.
+ */
+#if defined(__x86_64__) || defined(__ppc64__)
+typedef int f_int;
+#else
+typedef long int f_int;
+#endif
 
 /* 	Public Data Constants 	*/
 
@@ -67,17 +78,17 @@
  *
  * ----------------------------------------------------------------------------
  */
-int sscal_(long int *n, double *sa, double *sx, long int *incx) {
+int sscal_(f_int *n, double *sa, double *sx, f_int *incx) {
 	int		retval = 0;
 
 	/*
 	 * First, see if we have anything to do...
 	 */
     if (*n > 0) {
-    	long int		i = 0;
-		long int		di = *incx;
-		long int		ns = (*n) * di;
-		double		 	a = *sa;
+    	f_int		i = 0;
+		f_int		di = *incx;
+		f_int		ns = (*n) * di;
+		double	 	a = *sa;
 
 		for (; i < ns; i += di) {
 			sx[i] *= a;
