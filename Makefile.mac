@@ -21,8 +21,8 @@ SIZE = -DXMAX=75 -DYMAX=100
 #
 F77_OBJS = shark.o depmap.o newton.o getdk.o mkdev.o mkmesh.o \
        parser.o guess.o bias.o sharkio.o equil.o DC.o \
-       oneDes.o full1D.o orthomin.o minres.o gauss.o \
-       linpk.o sgtsl.o sgbsl.o isamax.o
+       oneDes.o full1D.o orthomin.o minres.o gauss.o linpk.o \
+       sgtsl.o sgbsl.o isamax.o
 
 CC_OBJS = sscal.o sdot.o saxpy.o sgbfa.o
 
@@ -32,24 +32,26 @@ OBJS = $(F77_OBJS) $(CC_OBJS)
 #    -Wimplicit => make all undefined variables cause error messages
 #    -c => do not link the output
 .f.o :
-	$(F77) $(F77OPTS) -c $*.f -o $*.o
+	@ $(F77) $(F77OPTS) -c $*.f -o $*.o
 
 #   This is the general way to make a .o from a .c
 .c.o :
-	$(CC) $(CCOPTS) -c $*.c -o $*.o
+	@ $(CC) $(CCOPTS) -c $*.c -o $*.o
 
 #
 #   The -DDIRECT means we have enough memory for the
-#   direct solvers
+#   direct solvers. -DLAPACK means that we're using the
+#   LAPACK solvers.
 #
 .F.o :
 	$(F77) $(F77OPTS) -DDIRECT -c $(SIZE) $*.F -o $*.o
 
 #
 #   This is the final compilation of all the modules
+#   The '-framework Accelerate' is needed for LAPACK
 #
 shark : $(OBJS)
-	$(F77) $(OBJS) -o shark $(LDOPTS)
+	$(F77) $(CPU_OPTS) $(OBJS) -o shark $(LDOPTS)
 
 clean :
 	rm -rf shark $(OBJS) $(OPT_OBJS) core
