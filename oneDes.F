@@ -221,6 +221,28 @@ c
 c     All done filling out [J] and -F!
 c
   200 continue
+#     ifdef LAPACK
+c
+c     We need to shift jl(i) down one because LAPACK doesn't want
+c     to see the unnecessary 0 in the first spot. So do a simple
+c     shift.
+c
+      do 300 i=1,ynodes-1
+        jl(i) = jl(i+1)
+  300 continue
+c
+c     Now we can call the solution system for this mess
+c
+      call dgtsv( ynodes, 1, jl, jm, ju, f, ynodes, info )
+      if ( info .ne. 0 ) then
+        write(6,'('' '',''***** Error in dgtsv! error #'',i3,
+     +                  '' *****''/
+     +            '' '',''      This system cannot be solved!'')')
+     +          info
+        error = .true.
+        return
+      endif
+#     else
 c
 c     Now we can call the solution system for this mess
 c
@@ -233,12 +255,13 @@ c
         error = .true.
         return
       endif
+#     endif
 c
 c     Now I need to go through the system again, updating the variables
 c     that I have the corrections for by using Brown and Lindsay's 
 c     scheme
 c
-      do 300 i=1,ynodes
+      do 400 i=1,ynodes
 c
 c       now change f(i) to go along with Brown and Lindsay's
 c       convergence criteria for the voltage
@@ -275,7 +298,7 @@ c
 c
 c     We are all done updating the system
 c
-  300 continue
+  400 continue
 c
 c     well, we have done another pass, so count it
 c

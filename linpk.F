@@ -128,6 +128,17 @@ c
         return
       endif
 #     else
+#     ifdef LAPACK
+c
+c     Now factor and solve the system of equations with BLAS
+c     and dgbsv().
+c
+      call dgbsv( n, ml, mu, 1, abd, lda, ipvt, delu, n, info )
+      if ( info .ne. 0 ) then
+        error = .true.
+        return
+      endif
+#     else
 c
 c     now factor the system of equations
 c
@@ -140,6 +151,7 @@ c
 c     now solve the system
 c
       call sgbsl( abd, lda, n, ml, mu, ipvt, delu, 0 )
+#     endif
 #     endif
 c
 c     ...and now we can return to the caller
@@ -258,6 +270,17 @@ c
         return
       endif
 #     else
+#     ifdef LAPACK
+c
+c     Now factor and solve the system of equations with BLAS
+c     and dgbsv().
+c
+      call dgbsv( n, ml, mu, 1, abd, lda, ipvt, delu, n, info )
+      if ( info .ne. 0 ) then
+        error = .true.
+        return
+      endif
+#     else
 c
 c     now factor the system of equations
 c
@@ -270,6 +293,7 @@ c
 c     now solve the system
 c
       call sgbsl( abd, lda, n, ml, mu, ipvt, delu, 0 )
+#     endif
 #     endif
 c
 c     ...and now we can return to the caller
