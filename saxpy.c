@@ -24,6 +24,17 @@
 /* 	Forward Declarations 	*/
 
 /* 	Public Data Types 		*/
+/*
+ * Because we need to be able to build this for 32-bit and 64-bit
+ * versions, I want to be able to typedef the integer here so that
+ * the value coming in from the FORTRAN code matches what we will
+ * use here. Without this, we'd have a mess on the conversions.
+ */
+#if defined(__x86_64__) || defined(__ppc64__)
+typedef int f_int;
+#else
+typedef long int f_int;
+#endif
 
 /* 	Public Data Constants 	*/
 
@@ -74,13 +85,13 @@
  *
  * ----------------------------------------------------------------------------
  */
-int saxpy_(long int *n, double *sa, double *sx, long int *incx, double *sy, long int *incy) {
+int saxpy_(f_int *n, double *sa, double *sx, f_int *incx, double *sy, f_int *incy) {
 	int			retval = 0;
 	/* dereference the pointers for faster access later on */
-	long int	count = *n;
+	f_int		count = *n;
 	double		a = *sa;
-	long int	dix = *incx;
-	long int	diy = *incy;
+	f_int		dix = *incx;
+	f_int		diy = *incy;
 
 	/*
 	 * First, see if we have anything to do
@@ -97,8 +108,8 @@ int saxpy_(long int *n, double *sa, double *sx, long int *incx, double *sy, long
 			 * we need to do this in batches. So, finish off the odd
 			 * ones, and then batch the rest.
 			 */
-			long int	m = 0;
-			long int	mm = count - (count/4)*4;
+			f_int	m = 0;
+			f_int	mm = count - (count/4)*4;
 
 			/*
 			 * OK... let's do the odd balls first...
@@ -118,9 +129,9 @@ int saxpy_(long int *n, double *sa, double *sx, long int *incx, double *sy, long
 				}
 			}
 		} else {
-			long int	m = 0;
-			long int	ix = 0;
-			long int 	iy = 0;
+			f_int	m = 0;
+			f_int	ix = 0;
+			f_int 	iy = 0;
 
 			/*
 			 * This is the general routine

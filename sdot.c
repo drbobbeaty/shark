@@ -24,6 +24,17 @@
 /* 	Forward Declarations 	*/
 
 /* 	Public Data Types 		*/
+/*
+ * Because we need to be able to build this for 32-bit and 64-bit
+ * versions, I want to be able to typedef the integer here so that
+ * the value coming in from the FORTRAN code matches what we will
+ * use here. Without this, we'd have a mess on the conversions.
+ */
+#if defined(__x86_64__) || defined(__ppc64__)
+typedef int f_int;
+#else
+typedef long int f_int;
+#endif
 
 /* 	Public Data Constants 	*/
 
@@ -72,20 +83,20 @@
  *
  * ----------------------------------------------------------------------------
  */
-double sdot_(long int *n, double *sx, long int *incx, double *sy, long int *incy) {
+double sdot_(f_int *n, double *sx, f_int *incx, double *sy, f_int *incy) {
     double 		retval = 0;
 	/* dereference some arguments for speed of access later */
-	long int	count = *n;
-	long int	dix = *incx;
-	long int 	diy = *incy;
+	f_int		count = *n;
+	f_int		dix = *incx;
+	f_int 		diy = *incy;
 
 	/*
 	 * First, see if we have anything to do
 	 */
 	if (count > 0) {
-		long int	m = 0;
-		long int	ix = 0;
-		long int	iy = 0;
+		f_int	m = 0;
+		f_int	ix = 0;
+		f_int	iy = 0;
 
 		for (m = 0; m < count; m++) {
 			retval += sx[ix] * sy[iy];

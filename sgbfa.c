@@ -33,13 +33,25 @@ extern int saxpy_();
 #define MIN(a,b)	((a) < (b) ? (a) : (b))
 #define MAX(a,b)	((a) > (b) ? (a) : (b))
 
+/*
+ * Because we need to be able to build this for 32-bit and 64-bit
+ * versions, I want to be able to typedef the integer here so that
+ * the value coming in from the FORTRAN code matches what we will
+ * use here. Without this, we'd have a mess on the conversions.
+ */
+#if defined(__x86_64__) || defined(__ppc64__)
+typedef int f_int;
+#else
+typedef long int f_int;
+#endif
+
 /* 	Public Data Constants 	*/
 /*
  * This is needed because the functions pass by reference, and some
  * times we need to pass in a constant 1, but need a reference to
  * it. That's why this is here.
  */
-const long int one = 1;
+const f_int one = 1;
 
 
 /* ----------------------------------------------------------------------------
@@ -130,18 +142,18 @@ const long int one = 1;
  *     integer isamax
  */
 
-int sgbfa_(double *abd, long int *lda, long int *n, long int *ml, long int *mu, long int *ipvt, long int *info) {
+int sgbfa_(double *abd, f_int *lda, f_int *n, f_int *ml, f_int *mu, f_int *ipvt, f_int *info) {
 	// do these for speed
-	long int sld = *ml;
-	long int sud = *mu;
-	long int m = sld + sud + 1;
-	long int sfda = *lda;
+	f_int sld = *ml;
+	f_int sud = *mu;
+	f_int m = sld + sud + 1;
+	f_int sfda = *lda;
 
 	// Local variables
-	long int i, j, k, l;
+	f_int i, j, k, l;
 	double t;
-	long int i0, j0, j1, imin, imax;
-	long int lm, mm, ju, jz, kp1, nm1;
+	f_int i0, j0, j1, imin, imax;
+	f_int lm, mm, ju, jz, kp1, nm1;
 
 	/* Parameter adjustments */
 	abd -= 1 + sfda * 1;
