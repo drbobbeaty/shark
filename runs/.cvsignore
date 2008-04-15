@@ -5,3 +5,5 @@ shark
 *.out
 *.mbp
 Icon
+*.dplot
+*.dgraph
