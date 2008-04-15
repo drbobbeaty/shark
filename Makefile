@@ -15,11 +15,11 @@ else
 ifeq ($(shell uname -m),sun3m)
 	F77 = f77
 	CPU_OPTS = -f68881
-endif
 else
 ifeq ($(shell uname -m),NP1)
 	F77 = fort10.3
 	CPU_OPTS = -DNP1
+endif
 endif
 endif
 endif
