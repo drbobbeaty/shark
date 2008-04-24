@@ -104,7 +104,7 @@ c
       integer i, k, siter, inorm, jnorm, l,
      +        LPMl, LPMr, RPMl, RPMr, TPMl, TPMr, BPMl, BPMr,
      +        SPMl, SPMr, Fvl, Fnl
-      real tarray(2), ittime, ntime, sutime, lptime
+      real tarray(2), time0, ittime, ntime, sutime, lptime
       PRECISION vl, vr, vt, vb, vij,
      +          hl, hr, ht, hb, vsatl, vsatr, vsatt, vsatb,
      +          nl, nr, nt, nb, nij, norm, Fnorm, a, b, c, d,
@@ -187,9 +187,8 @@ c
         do 50 i=1,xnodes
    50     nold(i,k) = n(i,k)
 c
-c     reset the timer for the start of the first pass
+c     reset the elapsed timer for the start of the first pass
 c
-      ittime = dtime(tarray)
       ntime = 0.0
 c
 c     Set the locations of the matricies in [J], so as to minimize the
@@ -229,6 +228,11 @@ c     for this pass
 c
   100 norm = -1.0
       Fnorm = -1.0
+c
+c     get a mark as to the starting time of this pass - we'll diff
+c     the other times in this pass against this for elapsed times.
+c
+      time0 = dtime(tarray)
 c
 c     For every node in the system, collect the data needed and fill
 c     in [J] and -F so that we can solve them to get the corrections
@@ -1414,7 +1418,7 @@ c
      +                  ''trouble.'')') linf
       endif
 c
-c     Get the setup time
+c     Get the setup time (we'll take out the bias later)
 c
       sutime = dtime(tarray)
 c
@@ -1523,7 +1527,7 @@ c
         return
       endif
 c
-c     Get the solution time
+c     Get the solution time (we'll take out the bias later)
 c
       lptime = dtime(tarray)
 c
@@ -1627,10 +1631,15 @@ c     well, we have done another pass, so count it
 c
       iter = iter + 1
 c
-c     get the time for this iteration
+c     get the total elapsed time for this iteration
 c
-      ittime = dtime(tarray)
-      ntime = ntime + ittime + sutime + lptime
+      ntime = dtime(tarray)
+c
+c     remove the bias in the times to create split times
+c
+      ittime = ntime - lptime
+      lptime = lptime - sutime
+      sutime = sutime - time0
 c
 c     do the debugging stuff if need be
 c
@@ -1811,7 +1820,7 @@ c
 c               output the entire map for debugging
           call depmap( 1, 0 )
           write(6,'('' '',''This unsuccessful solution took a '',
-     +                    ''total of '',i3,'':'',i2.2,''.'')')
+     +                    ''total of '',i5,'':'',i2.2,''.'')')
      +              int(ntime/60.0), int(ntime-int(ntime/60.0)*60.0)
 #         ifndef Cyber
             call flush(6)
@@ -1831,7 +1840,7 @@ c
      +              '' '',''    This is divergent! So the solution '',
      +                    ''is being halted!'')') norm
           write(6,'('' '',''This unsuccessful solution took a '',
-     +                    ''total of '',i3,'':'',i2.2,''.'')')
+     +                    ''total of '',i5,'':'',i2.2,''.'')')
      +              int(ntime/60.0), int(ntime-int(ntime/60.0)*60.0)
           write(6,'('' '')')
 #         ifndef Cyber
@@ -1846,7 +1855,7 @@ c
 c     write out a success message
 c
  400  write(6,'('' '',''   The Newton solution converged in '',
-     +                i4,'' iterations which took '',i3,'':'',
+     +                i4,'' iterations which took '',i5,'':'',
      +                i2.2,''.'')') iter, int(ntime/60.0), 
      +                              int(ntime-int(ntime/60.0)*60.0)
 #     ifndef Cyber

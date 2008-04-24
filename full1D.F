@@ -170,9 +170,8 @@ c
       do 50 k=1,ynodes
    50   nold(k) = n(iline,k)
 c
-c     reset the timer for the start of the first pass
+c     reset the elapsed timer for the start of the first pass
 c
-      ittime = dtime(tarray)
       ntime = 0.0
 c
 c     Get the number exp(-1) for speed's sake, we will use it
@@ -210,6 +209,11 @@ c     start a pass, and reset the norm of delta V for this pass
 c
   100 norm = -1.0
       Fnorm = -1.0
+c
+c     get a mark as to the starting time of this pass - we'll diff
+c     the other times in this pass against this for elapsed times.
+c
+      ittime = dtime(tarray)
 c
 c     For every node in the system, collect the data needed and fill
 c     in [J] and -F so that we can solve them to get the corrections
@@ -1054,7 +1058,7 @@ c
 c
 c     get the time for this iteration
 c
-      ittime = dtime(tarray)
+      ittime = dtime(tarray) - ittime
       ntime = ntime + ittime
 c
 c     do the debugging stuff if need be
