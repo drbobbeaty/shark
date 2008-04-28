@@ -104,7 +104,7 @@ c
       integer i, k, siter, inorm, jnorm, l,
      +        LPMl, LPMr, RPMl, RPMr, TPMl, TPMr, BPMl, BPMr,
      +        SPMl, SPMr, Fvl, Fnl
-      real tarray(2), sitime, time0, ittime, ntime, sutime, lptime
+      real tarray(2), ittime, ntime, sutime, lptime
       PRECISION vl, vr, vt, vb, vij,
      +          hl, hr, ht, hb, vsatl, vsatr, vsatt, vsatb,
      +          nl, nr, nt, nb, nij, norm, Fnorm, a, b, c, d,
@@ -189,8 +189,8 @@ c
 c
 c     reset the elapsed timer for the start of the first pass
 c
+      ittime = dtime(tarray)
       ntime = 0.0
-      sitime = dtime(tarray)
 c
 c     Set the locations of the matricies in [J], so as to minimize the
 c     bandwidth of [J].
@@ -229,11 +229,6 @@ c     for this pass
 c
   100 norm = -1.0
       Fnorm = -1.0
-c
-c     get a mark as to the starting time of this pass - we'll diff
-c     the other times in this pass against this for elapsed times.
-c
-      time0 = dtime(tarray)
 c
 c     For every node in the system, collect the data needed and fill
 c     in [J] and -F so that we can solve them to get the corrections
@@ -1419,7 +1414,7 @@ c
      +                  ''trouble.'')') linf
       endif
 c
-c     Get the setup time (we'll take out the bias later)
+c     Get the setup time
 c
       sutime = dtime(tarray)
 c
@@ -1528,7 +1523,7 @@ c
         return
       endif
 c
-c     Get the solution time (we'll take out the bias later)
+c     Get the solution time
 c
       lptime = dtime(tarray)
 c
@@ -1632,16 +1627,10 @@ c     well, we have done another pass, so count it
 c
       iter = iter + 1
 c
-c     get the total elapsed time for this iteration
+c     get the time for this iteration
 c
-      ntime = dtime(tarray)
-c
-c     remove the bias in the times to create split times
-c
-      ittime = ntime - lptime
-      lptime = lptime - sutime
-      sutime = sutime - time0
-      ntime = ntime - sitime
+      ittime = dtime(tarray)
+      ntime = ntime + ittime + sutime + lptime
 c
 c     do the debugging stuff if need be
 c

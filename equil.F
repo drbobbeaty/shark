@@ -86,6 +86,7 @@ c
 c
 c     reset the elapsed timer for the start of the first pass
 c
+      ittime = dtime(tarray)
       ntime = 0.0
 c
 c     start a pass, and reset the norm of delta v for this pass
@@ -241,7 +242,7 @@ c
 c
 c     get the time for this iteration
 c
-      ittime = dtime(tarray) - ittime
+      ittime = dtime(tarray)
       ntime = ntime + ittime
 c
 c     do the debugging stuff if need be
