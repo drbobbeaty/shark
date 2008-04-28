@@ -104,7 +104,7 @@ c
       integer i, k, siter, inorm, jnorm, l,
      +        LPMl, LPMr, RPMl, RPMr, TPMl, TPMr, BPMl, BPMr,
      +        SPMl, SPMr, Fvl, Fnl
-      real tarray(2), time0, ittime, ntime, sutime, lptime
+      real tarray(2), sitime, time0, ittime, ntime, sutime, lptime
       PRECISION vl, vr, vt, vb, vij,
      +          hl, hr, ht, hb, vsatl, vsatr, vsatt, vsatb,
      +          nl, nr, nt, nb, nij, norm, Fnorm, a, b, c, d,
@@ -190,6 +190,7 @@ c
 c     reset the elapsed timer for the start of the first pass
 c
       ntime = 0.0
+      sitime = dtime(tarray)
 c
 c     Set the locations of the matricies in [J], so as to minimize the
 c     bandwidth of [J].
@@ -1640,7 +1641,7 @@ c
       ittime = ntime - lptime
       lptime = lptime - sutime
       sutime = sutime - time0
-      ntime = ntime - time0
+      ntime = ntime - sitime
 c
 c     do the debugging stuff if need be
 c
