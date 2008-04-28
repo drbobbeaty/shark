@@ -1640,6 +1640,7 @@ c
       ittime = ntime - lptime
       lptime = lptime - sutime
       sutime = sutime - time0
+      ntime = ntime - time0
 c
 c     do the debugging stuff if need be
 c
