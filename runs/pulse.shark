@@ -11,5 +11,5 @@ bias vg1=4 eavg=7000
 pulse Qn=8.0e10 flat=0.0 fwhm=2.0
 * output every 1.0 psec for 10.0 psec starting stepping 100 times per psec
 time tout=1.0 tstop=10.0 delt=0.01
-start maxit=800 debug=sortof guess=MOS
+start maxit=800 debug=no guess=MOS
 

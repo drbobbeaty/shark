@@ -60,14 +60,10 @@ c
      +     defoc, gsol, gdol, dopch, uins, Qss
       character*16 srccor, drncor
 c
-c     now for the function declarations I need
-c
-      real dtime
-c
 c     now for some local variables
 c
       integer i, inorm, jnorm, info
-      real tarray(2), ittime, ntime
+      real t0, ittime, ntime
       PRECISION vl, vr, vij, hl, hr, nij, pij, norm
       PRECISION jl(Ny), jm(Ny), ju(Ny), f(Ny)
 c
@@ -77,12 +73,15 @@ c
 c
 c     reset the elapsed timer for the start of the first pass
 c
-      ittime = dtime(tarray)
       ntime = 0.0
 c
 c     start a pass, and reset the norm of delta v for this pass
 c 
   100 norm = -1.0
+c
+c     We need to get the starting time in CPU secs of this iteration
+c
+      call cpu_time(t0)
 c
 c     For every node in the system, collect the data needed and fill
 c     in [J] and -F so that we can solve them to get the corrections
@@ -306,7 +305,8 @@ c
 c
 c     get the time for this iteration
 c
-      ittime = dtime(tarray)
+      call cpu_time(ittime)
+      ittime = ittime - t0
       ntime = ntime + ittime
 c
 c     do the debugging stuff if need be
@@ -372,8 +372,8 @@ c     write out a success message
 c
       if ( verbose ) then
         write(6,'('' '',''   The Newton solution converged in '',i4,
-     +                  '' iterations which took '',f5.2,'' sec.'')')
-     +               iter, ntime
+     +                  '' iterations which took '',f5.2,'' msec.'')')
+     +               iter, 1.0e3*ntime
 #       ifndef Cyber
           call flush(6)
 #       endif

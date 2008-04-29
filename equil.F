@@ -56,15 +56,11 @@ c
      +     defoc, gsol, gdol, dopch, uins, Qss
       character*16 srccor, drncor
 c
-c     now for the function declarations I need
-c
-      real dtime
-c
 c     now for some local variables
 c
       logical LOSl, LOSr
       integer i, k, iter, inorm, jnorm
-      real tarray(2), ittime, ntime
+      real t0, ittime, ntime
       PRECISION vl, vr, vt, vb, vij, hl, hr, ht, hb, norm,
      +          Vob, Voc, dV
 c
@@ -86,7 +82,6 @@ c
 c
 c     reset the elapsed timer for the start of the first pass
 c
-      ittime = dtime(tarray)
       ntime = 0.0
 c
 c     start a pass, and reset the norm of delta v for this pass
@@ -96,7 +91,7 @@ c
 c     get a mark as to the starting time of this pass - we'll diff
 c     the other times in this pass against this for elapsed times.
 c
-      ittime = dtime(tarray)
+      call cpu_time(t0)
 c
 c     For every node in the system, collect the data needed and
 c     calculate the corrections to v(i,k) and n(i,k) and, in the
@@ -242,7 +237,8 @@ c
 c
 c     get the time for this iteration
 c
-      ittime = dtime(tarray)
+      call cpu_time(ittime)
+      ittime = ittime - t0
       ntime = ntime + ittime
 c
 c     do the debugging stuff if need be
@@ -251,9 +247,9 @@ c
 c
 c       output, for now, the statistics for this pass
 c
-        write(6,'('' '',''Iter. #'',i4,'' took '',f5.2,'' sec.'',
+        write(6,'('' '',''Iter. #'',i4,'' took '',f5.2,'' msec.'',
      +       '' with norm = '',g9.3,'' at V('',i3,'','',i3,'').'')')
-     +       iter, ittime, norm, inorm, jnorm
+     +       iter, 1.0e3*ittime, norm, inorm, jnorm
 #       ifndef Cyber
           call flush(6)
 #       endif
@@ -277,8 +273,7 @@ c
 c				output the entire map for debugging
           call depmap( 1,0 )
           write(6,'('' '',''This unsuccessful solution took a total '',
-     +        ''of '',i5,'':'',i2.2,''.'')') int(ntime/60.0),
-     +        int(ntime - int(ntime/60.0)*60.0)
+     +        ''of '',f7.2,'' msec.'')') 1.0e3*ntime
 #         ifndef Cyber
             call flush(6)
 #         endif
@@ -297,8 +292,7 @@ c
      +              '' '',''This is divergent! So the solution is '',
      +                    ''being halted!'')') norm
           write(6,'('' '',''This unsuccessful solution took a total '',
-     +        ''of '',i5,'':'',i2.2,''.'')') int(ntime/60.0),
-     +        int(ntime - int(ntime/60.0)*60.0)
+     +        ''of '',f7.2,'' msec.'')') 1.0e3*ntime
           write(6,'('' '')')
 #         ifndef Cyber
             call flush(6)
@@ -312,9 +306,8 @@ c
 c     write out  a success message
 c
       write(6,'('' '',''   The equilibrium SOR solution '',
-     +      ''converged in'',i4,'' iterations which took '',i3,
-     +      '':'',i2.2,''.'')') iter, int(ntime/60.0),
-     +      int(ntime - int(ntime/60.0)*60.0)
+     +      ''converged in'',i4,'' iterations which took '',f5.2,
+     +      '' msec.'')') iter, 1.0e3*ntime/60.0
 #     ifndef Cyber
         call flush(6)
 #     endif

@@ -103,7 +103,6 @@ c
 c     now I need to declare the functions I need
 c
       integer iargc
-      real etime, dtime
 c
 c     now the local veriables to the main routine
 c
@@ -117,10 +116,6 @@ c
 #     ifdef Cyber
       logical restart
 #     endif
-c
-c     Reset the timer routines so we know where we start
-c
-      time = dtime(tarray)
 c
 c     Reset the number of elapsed hours of run time
 c
