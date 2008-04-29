@@ -69,10 +69,6 @@ c
       common /JF/ J( (2*Nx*Ny), 10 ), delu( 2*Nx*Ny ), F( 2*Nx*Ny )
       PRECISION J, delu, F
 c
-c     now for the function declaration I need
-c
-      real dtime
-c
 c     Now I need to see if the computer I am on can do a direct
 c     maxtrix inversion
 c
@@ -100,7 +96,7 @@ c
       integer i, k, siter, inorm, jnorm, l,
      +        LPMl, LPMr, RPMl, RPMr, SPMl, SPMr,
      +        TPMl, TPMr, BPMl, BPMr, Fvl, Fnl
-      real tarray(2), ittime, ntime
+      real t0, ittime, ntime
       PRECISION vt, vb, vij,
      +          ht, hb, vsatt, vsatb,
      +          nt, nb, nij, norm, b, d, Fnorm,
@@ -172,7 +168,6 @@ c
 c
 c     reset the elapsed timer for the start of the first pass
 c
-      ittime = dtime(tarray)
       ntime = 0.0
 c
 c     Get the number exp(-1) for speed's sake, we will use it
@@ -210,6 +205,10 @@ c     start a pass, and reset the norm of delta V for this pass
 c
   100 norm = -1.0
       Fnorm = -1.0
+c
+c     We need to get the starting time in CPU secs of this iteration
+c
+      call cpu_time(t0)
 c
 c     For every node in the system, collect the data needed and fill
 c     in [J] and -F so that we can solve them to get the corrections
@@ -1054,7 +1053,8 @@ c
 c
 c     get the time for this iteration
 c
-      ittime = dtime(tarray)
+      call cpu_time(ittime)
+      ittime = ittime - t0
       ntime = ntime + ittime
 c
 c     do the debugging stuff if need be
@@ -1173,8 +1173,8 @@ c     write a success message
 c
   400 if ( verbose ) then
         write(6,'('' '',''   The Newton solution converged in'',
-     +        i4,'' iterations which took '',f5.1,'' sec.'')')
-     +        iter, ntime
+     +        i4,'' iterations which took '',f5.1,'' msec.'')')
+     +        iter, 1.0e3*ntime
 #       ifndef Cyber
           call flush(6)
 #       endif
