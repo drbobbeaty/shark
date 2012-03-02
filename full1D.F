@@ -858,8 +858,8 @@ c
           if ( ( (debug .eq. 'sortof') .or. (debug .eq. 'yes') ) .and.
      +         ( verbose ) ) then
             write(6,'('' '',''*** Error! ***''/
-     +                '' '',''    While trying to solve the system of '',
-     +                      ''equations, Shark has detected an error''/
+     +                '' '',''    While trying to solve the system of'',
+     +                      '' equations, Shark has detected an error''/
      +                '' '',''    in the solution itself. This has '',
      +                      ''made it impossible to solve the system.''/
      +                '' '',''    There were '',i4,'' iterations on '',
@@ -937,8 +937,8 @@ c
           if ( ( (debug .eq. 'sortof') .or. (debug .eq. 'yes') ) .and.
      +         ( verbose ) ) then
             write(6,'('' '',''*** Error! ***''/
-     +                '' '',''    While trying to solve the system of '',
-     +                      ''equations, Shark has detected an error''/
+     +                '' '',''    While trying to solve the system of'',
+     +                      '' equations, Shark has detected an error''/
      +                '' '',''    in the solution itself. This has '',
      +                      ''made it impossible to solve the '',
      +                      ''system.'')')
