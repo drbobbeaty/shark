@@ -443,7 +443,7 @@ c
             write(6,'('' '',''    Using Pao-Sah to calculate the'',
      +         '' initial quasi-fermi levels...'')')
           endif
-          call paosah( rho, gVs, gVd, gVg1, gEavg, error )
+          call paosah( rho, gVs, gVd, gVg1, error )
         else
 c
 c         Do a simple polynomial fit to the data
@@ -936,7 +936,7 @@ c
 
 
 
-      subroutine paosah( rho, aVs, aVd, aVg1, aEavg, error )
+      subroutine paosah( rho, aVs, aVd, aVg1, error )
 c
 c     This routine evaluates the Pao-Sah equations and sets the quasi-fermi
 c     level versus position for the FET initial guess.
@@ -952,7 +952,7 @@ c
 c     now for the arguments to this routine
 c
       logical error
-      PRECISION rho(Nx), aVs, aVd, aVg1, aEavg
+      PRECISION rho(Nx), aVs, aVd, aVg1
 c
 c     now for the functions I'll be calling in this subroutine
 c
