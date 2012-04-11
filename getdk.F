@@ -328,10 +328,10 @@ c     ...is it a mesh card?
 c
       if ( ncard .eq. 'mesh' ) then
         do 1070 i=1,numr
-          if ( nreal(i) .eq. 'xnodes' ) xnodes = vreal(i)
+          if ( nreal(i) .eq. 'xnodes' ) xnodes = int(vreal(i))
           if ( nreal(i) .eq. 'xfrac' ) xfrac = vreal(i)
-          if ( nreal(i) .eq. 'ynodes' ) ynodes = vreal(i)
-          if ( nreal(i) .eq. 'joxide' ) joxide = vreal(i)
+          if ( nreal(i) .eq. 'ynodes' ) ynodes = int(vreal(i))
+          if ( nreal(i) .eq. 'joxide' ) joxide = int(vreal(i))
  1070     if ( nreal(i) .eq. 'dVa' ) dVa = vreal(i)
         do 1075 i=1,numc
  1075     if ( nchar(i) .eq. 'auto' ) auto = vchar(i)
@@ -419,7 +419,7 @@ c
  1500     if ( nchar(i) .eq. 'type' ) soltyp = vchar(i)
         do 1600 i=1,numr
           if ( nreal(i) .eq. 'keep' ) then
-            keep = vreal(i)
+            keep = int(vreal(i))
             if ( keep .eq. 0 ) soltyp = 'minres'
           endif
  1600   continue
@@ -434,7 +434,7 @@ c
  1700     if ( nchar(i) .eq. 'with' ) icchan = vchar(i)
         do 1800 i=1,numr
           if ( nreal(i) .eq. 'vstop' ) vmax = vreal(i)
- 1800     if ( nreal(i) .eq. 'maxit' ) maxit = vreal(i)
+ 1800     if ( nreal(i) .eq. 'maxit' ) maxit = int(vreal(i))
       endif
 c
 c     ...is it the data card for an initial specified electron density?
