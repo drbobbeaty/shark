@@ -708,5 +708,10 @@ but it seems to be now part of the GCC collection, and is installed with:
 ```bash
 $ brew install gcc
 ```
-but you're going to get a lot more than just `gfortran`.
+but you're going to get a lot more than just `gfortran`. If you would like to
+try the cask for `gfortran`, you can try:
+```bash
+$ brew cask install gfortran
+```
+and you should get just `gfortran` from the cask.
 
