@@ -702,16 +702,13 @@ will build everything, and then you're ready to run the code.
 
 A `gfortran` or `f77` compiler. I have installed with:
 ```bash
-$ brew install gfortran
-```
-but it seems to be now part of the GCC collection, and is installed with:
-```bash
-$ brew install gcc
-```
-but you're going to get a lot more than just `gfortran`. If you would like to
-try the cask for `gfortran`, you can try:
-```bash
 $ brew cask install gfortran
 ```
-and you should get just `gfortran` from the cask.
+and you should get just `gfortran` from the cask, and be ready to go.
 
+If you have any previous versions of `gfortran` on your box, as I did, you
+might want to ininstall them first with:
+```bash
+$ brew uninstall --force gfortran
+```
+and then do the insall, above. It all works pretty seamlessly.
